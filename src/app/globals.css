@@ -1,26 +1,238 @@
-@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap');
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* --- Original Design CSS (Preserved) --- */
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+@font-face {
+  font-family: 'Vazirmatn';
+  src: url('/fonts/Vazirmatn-VariableFont_wght.ttf') format('truetype');
+  font-weight: 100 900;
+  /* Variable fonts support a range of weights */
+  font-style: normal;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  /* 2. Apply the font to the body */
+  font-family: 'Vazirmatn', 'Tahoma', 'Arial', sans-serif;
+  background-color: #f0f0f0;
+  direction: rtl;
+}
+
+.a4-container {
+  max-width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto;
+  background-color: white;
+  border: 1px solid #ccc;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.15);
+  position: relative;
+}
+
+.assessment-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-title {
+  background-color: #d4e4f0;
+  padding: 12px;
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  border-bottom: 1px solid #bbb;
+}
+
+.info-section {
+  display: flex;
+  border-bottom: 1px solid #bbb;
+}
+
+.info-cell {
+  flex: 1;
+  padding: 10px;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.info-label {
+  background-color: #f9f9f9;
+  border-left: 1px solid #bbb;
+}
+
+.components-header {
+  background-color: #faebd7;
+  padding: 10px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  color: #444;
+  border-bottom: 1px solid #bbb;
+}
+
+.assessment-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.assessment-table th,
+.assessment-table td {
+  border: 1px solid #bbb;
+  padding: 8px;
+  vertical-align: middle;
+}
+
+.assessment-table th {
+  background-color: #f0f0f0;
+  font-weight: bold;
+  text-align: center;
+  font-size: 13px;
+}
+
+.indicator-title {
+  width: 25%;
+  text-align: right;
+  font-weight: bold;
+  font-size: 13px;
+}
+
+.evaluation-desc {
+  width: 55%;
+  text-align: right;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.score-cell {
+  width: 20%;
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+  color: #c85a3e;
+}
+
+/* Sections */
+.reflection-section {
+  padding: 12px;
+  border-top: 1px solid #bbb;
+  position: relative;
+}
+
+.strengths-section {
+  background-color: #faf0e6;
+}
+
+.weaknesses-section {
+  background-color: #fce4dc;
+}
+
+.section-title {
+  font-size: 15px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.section-content {
+  font-size: 12px;
+  line-height: 1.7;
+  padding: 0 15px;
+}
+
+/* Summary */
+.summary-section {
+  background-color: #e8f0f5;
+  padding: 12px;
+  border-top: 1px solid #bbb;
+}
+
+.summary-title {
+  font-size: 15px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.summary-content {
+  font-size: 12px;
+  line-height: 1.7;
+  padding: 10px 15px;
+  background-color: #f0f4f7;
+  border: 1px dashed #aaa;
+}
+
+/* Scoring */
+.scoring-header {
+  background-color: #d4e4f0;
+  padding: 10px;
+  text-align: center;
+  font-size: 15px;
+  font-weight: bold;
+  color: #333;
+  border-top: 1px solid #bbb;
+  border-bottom: 1px solid #bbb;
+}
+
+.scoring-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.scoring-table th,
+.scoring-table td {
+  border: 1px solid #bbb;
+  padding: 10px;
+  text-align: center;
+  font-size: 13px;
+}
+
+.scoring-table th {
+  background-color: #f9f9f9;
+  font-weight: bold;
+}
+
+.score-range {
+  font-weight: bold;
+  color: #c85a3e;
+}
+
+/* Editable Inputs (Make them blend in) */
+.editable-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  text-align: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+}
+
+.editable-input:focus {
+  background-color: #fffef0;
+}
+
+.editable-textarea {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  resize: none;
+  min-height: 40px;
+  font-family: inherit;
+  font-size: inherit;
+  text-align: right;
+}
+
+.editable-textarea:focus {
+  background-color: #fffef0;
 }
