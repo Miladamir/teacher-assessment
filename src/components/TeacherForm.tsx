@@ -25,6 +25,10 @@ export default function TeacherForm() {
     const [scoringHeader, setScoringHeader] = useState("تأمیم امتیاز تحصیلی (45 نمره)");
     const [summaryTitle, setSummaryTitle] = useState("جمع بندی نهایی:");
 
+    // State for Scoring Table Content
+    const [scoreHeaders, setScoreHeaders] = useState(["35-45", "20-35", "5-20", "0-5"]);
+    const [scoreBody, setScoreBody] = useState(["مورد و حسن بیکی", "تصحیح و سوالات", "تأمیم درسی نیاز", "مضعف"]);
+
     const [tableRows, setTableRows] = useState<TableRow[]>([
         { id: 1, indicator: "توقیف واهل و معلمان فهم", evaluation: "• مفاهیم درس را به درستی شناخت...", score: "8/10" },
         { id: 2, indicator: "نقش و کلاس خوب", evaluation: "• کلاس درس مدیریت می‌کند...", score: "7/10" },
@@ -44,14 +48,14 @@ export default function TeacherForm() {
 
     const [summary, setSummary] = useState("استاد حضرت رضایه کم محضر هنگام...");
     const [isGenerating, setIsGenerating] = useState(false);
-
+    
     // Settings State
     const [showSettings, setShowSettings] = useState(false);
     const [layoutSettings, setLayoutSettings] = useState({
-        titleSize: 18,
-        headerSize: 12,
-        tableSize: 9,
-        sectionSize: 10
+      titleSize: 18,
+      headerSize: 12,
+      tableSize: 9,
+      sectionSize: 10
     });
 
     const handleExport = async () => {
@@ -68,6 +72,8 @@ export default function TeacherForm() {
                 componentsHeader,
                 scoringHeader,
                 summaryTitle,
+                scoreHeaders, // Pass new data
+                scoreBody,    // Pass new data
                 settings: layoutSettings
             });
         } catch (error) {
@@ -118,14 +124,13 @@ export default function TeacherForm() {
         }
     };
 
-    // Helper to update settings
     const updateSetting = (key: keyof typeof layoutSettings, value: number) => {
-        setLayoutSettings(prev => ({ ...prev, [key]: value }));
+      setLayoutSettings(prev => ({ ...prev, [key]: value }));
     };
 
     return (
         <div className="min-h-screen bg-gray-100 py-8 px-4" dir="rtl">
-
+            
             {/* Settings Button */}
             <button
                 onClick={() => setShowSettings(!showSettings)}
@@ -138,61 +143,55 @@ export default function TeacherForm() {
             {showSettings && (
                 <div className="fixed top-20 left-5 z-40 bg-white p-6 rounded-xl shadow-2xl w-80 border-2 border-gray-100 print:hidden overflow-y-auto max-h-[90vh]">
                     <h3 className="font-bold text-lg mb-4 border-b pb-2 text-gray-800">تنظیمات</h3>
-
-                    {/* Actions */}
+                    
                     <div className="flex flex-col gap-3 mb-4">
                         <button onClick={addTableRow} className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 rounded-lg text-sm font-bold transition">+ افزودن ردیف جدول</button>
                         <button onClick={addStrengthSection} className="w-full bg-orange-50 hover:bg-orange-100 text-orange-700 py-2 rounded-lg text-sm font-bold transition">+ افزودن بخش قوت</button>
                         <button onClick={addWeaknessSection} className="w-full bg-red-50 hover:bg-red-100 text-red-700 py-2 rounded-lg text-sm font-bold transition">+ افزودن بخش ضعف</button>
                     </div>
 
-                    {/* Size Adjustments */}
                     <div className="border-t pt-4 mt-2 space-y-4">
                         <h4 className="font-bold text-sm text-gray-600">اندازه‌ها (PDF & وب)</h4>
-
-                        {/* Title Size */}
+                        
                         <div>
                             <label className="text-xs text-gray-500 flex justify-between">
                                 <span>عنوان اصلی</span> <span>{layoutSettings.titleSize}px</span>
                             </label>
-                            <input type="range" min="12" max="30" value={layoutSettings.titleSize}
+                            <input type="range" min="12" max="30" value={layoutSettings.titleSize} 
                                 onChange={(e) => updateSetting('titleSize', Number(e.target.value))}
                                 className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer" />
                         </div>
 
-                        {/* Header Size */}
                         <div>
                             <label className="text-xs text-gray-500 flex justify-between">
                                 <span>سربرگ‌ها</span> <span>{layoutSettings.headerSize}px</span>
                             </label>
-                            <input type="range" min="8" max="20" value={layoutSettings.headerSize}
+                            <input type="range" min="8" max="20" value={layoutSettings.headerSize} 
                                 onChange={(e) => updateSetting('headerSize', Number(e.target.value))}
                                 className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer" />
                         </div>
 
-                        {/* Table Size */}
-                        <div>
+                         <div>
                             <label className="text-xs text-gray-500 flex justify-between">
                                 <span>جدول</span> <span>{layoutSettings.tableSize}px</span>
                             </label>
-                            <input type="range" min="6" max="16" value={layoutSettings.tableSize}
+                            <input type="range" min="6" max="16" value={layoutSettings.tableSize} 
                                 onChange={(e) => updateSetting('tableSize', Number(e.target.value))}
                                 className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer" />
                         </div>
 
-                        {/* Section Size */}
-                        <div>
+                         <div>
                             <label className="text-xs text-gray-500 flex justify-between">
                                 <span>بخش‌ها</span> <span>{layoutSettings.sectionSize}px</span>
                             </label>
-                            <input type="range" min="6" max="16" value={layoutSettings.sectionSize}
+                            <input type="range" min="6" max="16" value={layoutSettings.sectionSize} 
                                 onChange={(e) => updateSetting('sectionSize', Number(e.target.value))}
                                 className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer" />
                         </div>
                     </div>
 
-                    <hr className="my-4" />
-                    <button
+                    <hr className="my-4"/>
+                    <button 
                         onClick={handleExport}
                         disabled={isGenerating}
                         className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-bold transition shadow-md disabled:opacity-50"
@@ -240,13 +239,13 @@ export default function TeacherForm() {
 
                 {/* Components Header */}
                 <div className="bg-orange-50 p-2 text-center font-bold border-b border-gray-300 mb-0">
-                    <input
+                     <input 
                         type="text"
                         value={componentsHeader}
                         onChange={(e) => setComponentsHeader(e.target.value)}
                         style={{ fontSize: `${layoutSettings.headerSize}px` }}
                         className="w-full bg-transparent text-center font-bold"
-                    />
+                     />
                 </div>
 
                 {/* Assessment Table */}
@@ -311,14 +310,14 @@ export default function TeacherForm() {
                     {/* Strengths */}
                     {strengths.map((section, index) => (
                         <div key={section.id} className="bg-orange-50 border border-gray-300 p-4 border-l-0 border-r-0 relative group">
-                            <button
+                            <button 
                                 onClick={() => removeSection(section.id, 'strengths')}
                                 className="absolute left-2 top-2 text-red-400 hover:text-red-600 opacity-0 group-hover:opacity-100 transition print:hidden"
                             >✕</button>
                             <div className="font-bold mb-2 text-center">
-                                <input
-                                    type="text"
-                                    value={section.title}
+                                <input 
+                                    type="text" 
+                                    value={section.title} 
                                     onChange={(e) => {
                                         const updated = [...strengths];
                                         updated[index].title = e.target.value;
@@ -340,14 +339,14 @@ export default function TeacherForm() {
                     {/* Weaknesses */}
                     {weaknesses.map((section, index) => (
                         <div key={section.id} className="bg-red-50 border border-gray-300 border-t-0 border-l-0 border-r-0 p-4 relative group">
-                            <button
+                             <button 
                                 onClick={() => removeSection(section.id, 'weaknesses')}
                                 className="absolute left-2 top-2 text-red-400 hover:text-red-600 opacity-0 group-hover:opacity-100 transition print:hidden"
                             >✕</button>
                             <div className="font-bold mb-2 text-center">
-                                <input
-                                    type="text"
-                                    value={section.title}
+                                <input 
+                                    type="text" 
+                                    value={section.title} 
                                     onChange={(e) => {
                                         const updated = [...weaknesses];
                                         updated[index].title = e.target.value;
@@ -369,7 +368,7 @@ export default function TeacherForm() {
 
                 {/* Scoring Header */}
                 <div className="bg-blue-50 p-2 text-center font-bold border border-gray-300 border-l-0 border-r-0">
-                    <input
+                    <input 
                         type="text"
                         value={scoringHeader}
                         onChange={(e) => setScoringHeader(e.target.value)}
@@ -378,22 +377,110 @@ export default function TeacherForm() {
                     />
                 </div>
 
-                {/* Scoring Table */}
+                {/* Scoring Table - NOW EDITABLE */}
                 <table className="w-full border-collapse border border-gray-300 border-t-0 mb-6 text-center">
                     <thead>
                         <tr className="bg-gray-50">
-                            <th className="border-l border-gray-300 p-2 text-orange-600">35-45</th>
-                            <th className="border-l border-gray-300 p-2 text-orange-600">20-35</th>
-                            <th className="border-l border-gray-300 p-2 text-orange-600">5-20</th>
-                            <th className="p-2 text-orange-600">0-5</th>
+                            <th className="border-l border-gray-300 p-2 text-orange-600">
+                                <input 
+                                    type="text" 
+                                    value={scoreHeaders[0]} 
+                                    onChange={(e) => {
+                                        const updated = [...scoreHeaders];
+                                        updated[0] = e.target.value;
+                                        setScoreHeaders(updated);
+                                    }}
+                                    className="w-full bg-transparent text-center font-bold text-orange-600"
+                                />
+                            </th>
+                            <th className="border-l border-gray-300 p-2 text-orange-600">
+                                <input 
+                                    type="text" 
+                                    value={scoreHeaders[1]} 
+                                    onChange={(e) => {
+                                        const updated = [...scoreHeaders];
+                                        updated[1] = e.target.value;
+                                        setScoreHeaders(updated);
+                                    }}
+                                    className="w-full bg-transparent text-center font-bold text-orange-600"
+                                />
+                            </th>
+                            <th className="border-l border-gray-300 p-2 text-orange-600">
+                                <input 
+                                    type="text" 
+                                    value={scoreHeaders[2]} 
+                                    onChange={(e) => {
+                                        const updated = [...scoreHeaders];
+                                        updated[2] = e.target.value;
+                                        setScoreHeaders(updated);
+                                    }}
+                                    className="w-full bg-transparent text-center font-bold text-orange-600"
+                                />
+                            </th>
+                            <th className="p-2 text-orange-600">
+                                <input 
+                                    type="text" 
+                                    value={scoreHeaders[3]} 
+                                    onChange={(e) => {
+                                        const updated = [...scoreHeaders];
+                                        updated[3] = e.target.value;
+                                        setScoreHeaders(updated);
+                                    }}
+                                    className="w-full bg-transparent text-center font-bold text-orange-600"
+                                />
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td className="border-l border-t border-gray-300 p-2">مورد و حسن بیکی</td>
-                            <td className="border-l border-t border-gray-300 p-2">تصحیح و سوالات</td>
-                            <td className="border-l border-t border-gray-300 p-2">تأمیم درسی نیاز</td>
-                            <td className="border-t border-gray-300 p-2">مضعف</td>
+                            <td className="border-l border-t border-gray-300 p-2">
+                                <input 
+                                    type="text" 
+                                    value={scoreBody[0]} 
+                                    onChange={(e) => {
+                                        const updated = [...scoreBody];
+                                        updated[0] = e.target.value;
+                                        setScoreBody(updated);
+                                    }}
+                                    className="w-full bg-transparent text-center"
+                                />
+                            </td>
+                            <td className="border-l border-t border-gray-300 p-2">
+                                <input 
+                                    type="text" 
+                                    value={scoreBody[1]} 
+                                    onChange={(e) => {
+                                        const updated = [...scoreBody];
+                                        updated[1] = e.target.value;
+                                        setScoreBody(updated);
+                                    }}
+                                    className="w-full bg-transparent text-center"
+                                />
+                            </td>
+                            <td className="border-l border-t border-gray-300 p-2">
+                                <input 
+                                    type="text" 
+                                    value={scoreBody[2]} 
+                                    onChange={(e) => {
+                                        const updated = [...scoreBody];
+                                        updated[2] = e.target.value;
+                                        setScoreBody(updated);
+                                    }}
+                                    className="w-full bg-transparent text-center"
+                                />
+                            </td>
+                            <td className="border-t border-gray-300 p-2">
+                                <input 
+                                    type="text" 
+                                    value={scoreBody[3]} 
+                                    onChange={(e) => {
+                                        const updated = [...scoreBody];
+                                        updated[3] = e.target.value;
+                                        setScoreBody(updated);
+                                    }}
+                                    className="w-full bg-transparent text-center"
+                                />
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -401,7 +488,7 @@ export default function TeacherForm() {
                 {/* Summary */}
                 <div className="bg-blue-50 p-4 border border-gray-300 border-l-0 border-r-0 rounded">
                     <div className="font-bold mb-2 text-center">
-                        <input
+                        <input 
                             type="text"
                             value={summaryTitle}
                             onChange={(e) => setSummaryTitle(e.target.value)}
